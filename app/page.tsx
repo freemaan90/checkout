@@ -1,17 +1,35 @@
-interface Props{
-  params:URLSearchParams
+export interface Props {
+  searchParams: SearchParams;
 }
 
-export default function Home(props:Props) {
-  console.log(props)
-  const getOrderForm = () =>{
+export interface PropsClass {
+  params: Params;
+  searchParams: SearchParams;
+}
 
-  }
+export interface Params {
+}
+
+export interface SearchParams {
+  of: string;
+  auto: string;
+}
+
+
+export default function Home({searchParams}: Props) {
+  // const entries = Object.entries(props)
+  console.log(searchParams)
+
+
   return (
     <div>
       <ul>
         {
-          Object.values(props).map((p,i) =>(<li key={i}>{p.params}</li>))
+          Object.values(searchParams).map((p,i) => {
+            console.log(`p: `,p)
+            return Object.keys(searchParams)[i] === 'of' ? <div key={p}>{p}</div> : <div key={p}></div>
+          })
+
         }
       </ul>
     </div>
