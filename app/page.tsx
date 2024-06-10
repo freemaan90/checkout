@@ -9,7 +9,11 @@ export default function Home(props:Props) {
   }
   return (
     <div>
-      {props.params.toString()}
+      <ul>
+        {
+          Object.values(props).map((p,i) =>(<li key={i}>{p.params}</li>))
+        }
+      </ul>
     </div>
   );
 }
