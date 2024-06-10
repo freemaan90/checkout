@@ -1,37 +1,54 @@
 export interface Props {
   searchParams: SearchParams;
 }
-
-export interface PropsClass {
-  params: Params;
-  searchParams: SearchParams;
-}
-
-export interface Params {
-}
-
 export interface SearchParams {
   of: string;
-  auto: string;
+}
+
+export interface ClientProfileData {
+  clientProfileData: ClientProfileDataClass;
+}
+
+export interface ClientProfileDataClass {
+  email:                    string;
+  firstName:                string;
+  lastName:                 string;
+  document:                 number;
+  documentType:             string;
+  phone:                    number;
+  corporateName:            null;
+  tradeName:                null;
+  corporateDocument:        null;
+  stateInscription:         null;
+  corporatePhone:           null;
+  isCorporate:              boolean;
+  profileCompleteOnLoading: boolean;
+  profileErrorOnLoading:    boolean;
+  customerClass:            null;
 }
 
 
-export default function Home({searchParams}: Props) {
-  // const entries = Object.entries(props)
-  console.log(searchParams)
+export default async function Home({searchParams}: Props) {
 
+  const getOrderForm = async(orderFormId:string)=>{
+    const baseURL = `https://jumboargentinaqaio.myvtex.com/api/checkout/pub/orderForm/${orderFormId}`
+    const orderForm = await fetch(baseURL).then(resp => resp.json())
+    return orderForm
+  }
 
+  const of = Object.values(searchParams).filter((p,i) => {
+    return Object.keys(searchParams)[i] === 'of' && p
+  })[0]
+
+  const { clientProfileData}:ClientProfileData = await getOrderForm(of)
+  
   return (
-    <div>
-      <ul>
-        {
-          Object.values(searchParams).map((p,i) => {
-            console.log(`p: `,p)
-            return Object.keys(searchParams)[i] === 'of' ? <div key={p}>{p}</div> : <div key={p}></div>
-          })
-
-        }
-      </ul>
-    </div>
+    <ul>
+      {
+        Object.values(clientProfileData).map((value,i) => (
+          <li key={i}>{Object.keys(clientProfileData)[i]} : {value}</li>
+        ))
+      }
+    </ul>
   );
 }
